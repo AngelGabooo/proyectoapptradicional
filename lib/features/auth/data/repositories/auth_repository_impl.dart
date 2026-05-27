@@ -23,10 +23,11 @@ class AuthRepositoryImpl implements AuthRepository {
         throw Exception('No se recibieron datos del usuario');
       }
 
-      // Como no hay token, solo guardamos el usuario
       await StorageHelper.saveUser(jsonEncode(userData));
-      // No guardamos token porque el backend no lo genera
+      // ✅ Guardar userId por separado
+      await StorageHelper.saveUserId(userData['id'].toString());
 
+      print('✅ Usuario registrado y guardado. ID: ${userData['id']}');
       return UserModel.fromJson(userData as Map<String, dynamic>).toEntity();
     } catch (e) {
       print('❌ Error en register: $e');
@@ -47,7 +48,10 @@ class AuthRepositoryImpl implements AuthRepository {
       }
 
       await StorageHelper.saveUser(jsonEncode(userData));
+      // ✅ Guardar userId por separado
+      await StorageHelper.saveUserId(userData['id'].toString());
 
+      print('✅ Usuario logueado. ID: ${userData['id']}');
       return UserModel.fromJson(userData as Map<String, dynamic>).toEntity();
     } catch (e) {
       print('❌ Error en login: $e');
@@ -62,6 +66,6 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<bool> isLoggedIn() async {
-    return await StorageHelper.isLoggedIn(); // Cambiaremos esto después
+    return await StorageHelper.isLoggedIn();
   }
 }
