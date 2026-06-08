@@ -1,4 +1,3 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
@@ -9,10 +8,12 @@ import 'features/tasks/data/datasources/task_datasource.dart';
 import 'features/tasks/data/repositories/task_repository_impl.dart';
 import 'features/tasks/presentation/viewmodels/task_viewmodel.dart';
 import 'core/themes/app_theme.dart';
+import 'core/widgets/activity_detector.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
 
-void main() {
-  // Capturar errores globalmente
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   FlutterError.onError = (FlutterErrorDetails details) {
     print('═══════════════════════════════════════════════════════════');
     print('❌ ERROR: ${details.exceptionAsString()}');
@@ -44,13 +45,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: authViewModel),
         ChangeNotifierProvider.value(value: taskViewModel),
       ],
-      child: MaterialApp(
-        title: 'Recordatorios',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.system,
-        home: const LoginScreen(),
+      child: ActivityDetector(
+        child: MaterialApp(
+          title: 'Recordatorios',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: ThemeMode.system,
+          home: const LoginScreen(),
+        ),
       ),
     );
   }

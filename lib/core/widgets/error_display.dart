@@ -1,4 +1,3 @@
-// lib/core/widgets/error_display.dart
 import 'package:flutter/material.dart';
 
 class ErrorDisplay extends StatelessWidget {
@@ -11,7 +10,6 @@ class ErrorDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Si message está vacío, no mostrar nada
     if (message.isEmpty) return const SizedBox.shrink();
 
     final colorScheme = Theme.of(context).colorScheme;

@@ -1,4 +1,3 @@
-// lib/features/auth/presentation/screens/register_screen.dart
 import 'package:flutter/material.dart';
 import '../../../../core/widgets/gradient_background.dart';
 import '../../../../core/widgets/app_logo.dart';

@@ -1,4 +1,3 @@
-// lib/core/helpers/storage_helper.dart
 import '../constants/app_constants.dart';
 
 class StorageHelper {
@@ -20,13 +19,11 @@ class StorageHelper {
     return _storage[AppConstants.userKey];
   }
 
-  // ✅ Guardar userId
   static Future<void> saveUserId(String userId) async {
     _storage['user_id'] = userId;
     print('💾 userId guardado: $userId');
   }
 
-  // ✅ Obtener userId
   static Future<String?> getUserId() async {
     final userId = _storage['user_id'];
     print('📖 Obteniendo userId: $userId');

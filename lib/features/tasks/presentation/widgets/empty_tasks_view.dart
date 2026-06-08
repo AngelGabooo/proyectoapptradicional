@@ -1,4 +1,3 @@
-// lib/features/tasks/presentation/widgets/empty_tasks_view.dart
 import 'package:flutter/material.dart';
 
 class EmptyTasksView extends StatelessWidget {

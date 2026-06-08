@@ -1,4 +1,3 @@
-// lib/features/auth/presentation/widgets/auth_footer.dart
 import 'package:flutter/material.dart';
 
 class AuthFooter extends StatelessWidget {
@@ -25,39 +24,6 @@ class AuthFooter extends StatelessWidget {
         ),
 
         const SizedBox(height: 20),
-
-        Row(
-          children: [
-            Expanded(
-              child: OutlinedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.g_mobiledata, size: 20),
-                label: const Text('Google'),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: OutlinedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.apple, size: 20),
-                label: const Text('Apple'),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-
         const SizedBox(height: 24),
 
         Row(

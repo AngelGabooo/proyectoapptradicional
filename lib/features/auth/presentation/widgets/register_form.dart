@@ -1,4 +1,3 @@
-// lib/features/auth/presentation/widgets/register_form.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/widgets/custom_text_field.dart';

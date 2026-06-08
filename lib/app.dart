@@ -1,4 +1,3 @@
-// lib/app.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
@@ -22,7 +21,6 @@ class App extends StatelessWidget {
         '/tasks': (context) => const TasksScreen(),
       },
       onGenerateRoute: (settings) {
-        // Manejo adicional de rutas si es necesario
         switch (settings.name) {
           case '/':
             return MaterialPageRoute(builder: (_) => LoginScreen());

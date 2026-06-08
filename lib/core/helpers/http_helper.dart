@@ -1,14 +1,15 @@
-// lib/core/helpers/http_helper.dart
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../constants/app_constants.dart';
 import 'storage_helper.dart';
 
+//singleton
 class HttpHelper {
   static final HttpHelper _instance = HttpHelper._internal();
   factory HttpHelper() => _instance;
   HttpHelper._internal();
 
+  //Token jwt
   String? _authToken;
 
   void setAuthToken(String token) {
@@ -43,8 +44,8 @@ class HttpHelper {
   }
 
   Future<dynamic> post(String endpoint, dynamic data) async {
-    final url = '${AppConstants.baseUrl}$endpoint';
-    print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        final url = '${AppConstants.baseUrl}$endpoint';
+        print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     print('📤 POST a: $url');
     print('📦 Datos enviados: $data');
     print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
@@ -100,7 +101,6 @@ class HttpHelper {
     return _handleResponse(response);
   }
 
-  // ==================== MANEJO MEJORADO DE RESPUESTAS ====================
   dynamic _handleResponse(http.Response response) {
     print('📥 Código final: ${response.statusCode}');
 
@@ -114,7 +114,6 @@ class HttpHelper {
         return response.body;
       }
     } else {
-      // Mejor manejo de errores del backend
       String errorMessage = 'Error ${response.statusCode}';
       try {
         final errorData = jsonDecode(response.body);

@@ -1,4 +1,3 @@
-// lib/features/tasks/presentation/widgets/task_stats.dart
 import 'package:flutter/material.dart';
 
 class TaskStats extends StatelessWidget {

@@ -1,4 +1,3 @@
-// lib/core/widgets/app_logo.dart
 import 'package:flutter/material.dart';
 
 class AppLogo extends StatelessWidget {
@@ -13,7 +12,6 @@ class AppLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    // Estilos seguros con fallbacks
     final headlineStyle = Theme.of(context).textTheme.headlineLarge;
     final bodyStyle = Theme.of(context).textTheme.bodyMedium;
 

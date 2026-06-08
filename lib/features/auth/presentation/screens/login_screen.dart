@@ -1,4 +1,3 @@
-// lib/features/auth/presentation/screens/login_screen.dart
 import 'package:flutter/material.dart';
 import '../../../../core/widgets/gradient_background.dart';
 import '../../../../core/widgets/app_logo.dart';
@@ -31,7 +30,6 @@ class _LoginScreenState extends State<LoginScreen> {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            // Sin botón de tema, AppBar transparente y limpio
             backgroundColor: Colors.transparent,
             elevation: 0,
           ),

@@ -1,4 +1,3 @@
-// lib/features/tasks/presentation/screens/tasks_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/task_viewmodel.dart';
@@ -10,6 +9,7 @@ import '../widgets/empty_tasks_view.dart';
 import '../widgets/add_task_dialog.dart';
 import '../widgets/edit_task_dialog.dart';
 import '../../../../core/widgets/loading_indicator.dart';
+import '../../../../core/widgets/activity_detector.dart';
 
 class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});
@@ -27,12 +27,19 @@ class _TasksScreenState extends State<TasksScreen> {
     });
   }
 
+  @override
+  void dispose() {
+    context.read<AuthViewModel>().stopInactivityTimer();
+    super.dispose();
+  }
+
   void _showAddTaskDialog() {
     showDialog(
       context: context,
       builder: (context) => AddTaskDialog(
         onAdd: (title, description) async {
           await context.read<TaskViewModel>().addTask(title, description);
+          context.read<AuthViewModel>().resetInactivityTimer();
         },
       ),
     );
@@ -45,6 +52,7 @@ class _TasksScreenState extends State<TasksScreen> {
         task: task,
         onEdit: (updatedTask) async {
           await viewModel.updateTask(updatedTask);
+          context.read<AuthViewModel>().resetInactivityTimer();
         },
       ),
     );
@@ -56,59 +64,76 @@ class _TasksScreenState extends State<TasksScreen> {
     final authViewModel = context.watch<AuthViewModel>();
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mis Tareas'),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await authViewModel.logout();
-              if (context.mounted) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LoginScreen()),
-                );
-              }
-            },
-            tooltip: 'Cerrar sesión',
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: TaskStats(
-            pendingCount: taskViewModel.pendingCount,
-            completedCount: taskViewModel.completedCount,
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (authViewModel.currentUser == null && context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+        );
+      }
+    });
+
+    return ActivityDetector(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Mis Tareas'),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () async {
+                await authViewModel.logout();
+                if (context.mounted) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  );
+                }
+              },
+              tooltip: 'Cerrar sesión',
+            ),
+          ],
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(60),
+            child: TaskStats(
+              pendingCount: taskViewModel.pendingCount,
+              completedCount: taskViewModel.completedCount,
+            ),
           ),
         ),
-      ),
-      body: _buildBody(taskViewModel),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _showAddTaskDialog,
-        icon: const Icon(Icons.add),
-        label: const Text('Nueva Tarea'),
-        backgroundColor: colorScheme.primary,
+        body: _buildBody(taskViewModel, authViewModel),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: _showAddTaskDialog,
+          icon: const Icon(Icons.add),
+          label: const Text('Nueva Tarea'),
+          backgroundColor: colorScheme.primary,
+        ),
       ),
     );
   }
 
-  Widget _buildBody(TaskViewModel viewModel) {
-    if (viewModel.isLoading && viewModel.tasks.isEmpty) {
+  Widget _buildBody(TaskViewModel taskViewModel, AuthViewModel authViewModel) {
+    if (taskViewModel.isLoading && taskViewModel.tasks.isEmpty) {
       return const LoadingIndicator();
     }
 
-    if (viewModel.tasks.isEmpty) {
+    if (taskViewModel.tasks.isEmpty) {
       return EmptyTasksView(
         onAddPressed: _showAddTaskDialog,
       );
     }
 
     return TaskList(
-      tasks: viewModel.tasks,
-      onToggle: (task) => viewModel.toggleTask(task),
-      onEdit: (task) => _showEditDialog(viewModel, task),
-      onDelete: (id) => viewModel.deleteTask(id),
+      tasks: taskViewModel.tasks,
+      onToggle: (task) {
+        taskViewModel.toggleTask(task);
+        authViewModel.resetInactivityTimer();
+      },
+      onEdit: (task) => _showEditDialog(taskViewModel, task),
+      onDelete: (id) {
+        taskViewModel.deleteTask(id);
+        authViewModel.resetInactivityTimer();
+      },
     );
   }
 }
